@@ -30,7 +30,7 @@ Backend (Django, `backend/`) đang chạy production trên Render (https://eight
 ## Chưa làm (chờ khách hoặc bên thứ ba)
 
 - Cổng thanh toán: đơn app có tiền phải trả → 501 (`PAYMENT_PROVIDER=demo` chỉ dùng để thử). Chưa có thẻ lưu, chưa gửi eGift thật.
-- Máy quẹt thẻ và máy in nối POS, gift card Square, kho, hóa đơn điện tử. (Apple Wallet đã phát hành thẻ trên production từ 27/10/2026.)
+- Máy quẹt thẻ và máy in nối POS, bán gift card qua Square (dùng gift card có sẵn của khách ở quầy đã có API từ 29/10/2026: `GET /pos/customers/{id}/gift-card`, thanh toán `method: gift` + `giftCardId`, hoàn về đúng thẻ), kho, hóa đơn điện tử. (Apple Wallet đã phát hành thẻ trên production từ 27/10/2026.)
 - Bật `BookingRule.is_enabled` cho từng quán = bật kiểm sức chứa/slot online (cần khách xác nhận `max_covers_per_slot`, `max_party_size`, `min_lead_minutes`); yêu cầu đặt bàn đã vào BOS từ 22/10/2026 không cần bật. Quán Akuna St vẫn TBC (`status=tbc` → `bookings_disabled`). Email thật cần `EMAIL_PROVIDER_API_KEY` + `EMAIL_FROM` trên Render.
 - Website hiển thị món hết hàng theo quán: backend đã có (`?location=`), giao diện chờ khách duyệt.
 - React BOS: chưa làm, Django Admin đang là BOS.

@@ -16,6 +16,7 @@ from rest_framework.views import APIView
 
 from apps.core.permissions import STAFF_ROLES
 from apps.core.public_services import categories_data
+from apps.loyalty import services as loyalty
 from apps.menu.catalog import menu_items
 from apps.mobile.errors import AppError, app_exception_handler
 from apps.mobile.serializers import ErrorOut
@@ -588,6 +589,29 @@ class CustomerLoyaltyView(PosView):
         customer = services.customer_for(customer_id)
         services.set_card_balance(request, customer, data["stamps"], data["rewards"])
         return Response(s.PosCustomerOut(p.customer(customer)).data)
+
+
+class CustomerGiftCardView(PosView):
+    @doc(MONEY, "A customer's gift card", None, {200: s.PosGiftCardOut}, (403, 404))
+    @require_staff_access("gift.redeem")
+    def get(self, request, customer_id):
+        """
+        The customer's gift card (the same balance as the app and BOS), read before taking a
+        gift card payment. `balance` is in cents. Pay with `method: gift` + `giftCardId` = this
+        `id`: the server takes the amount off the card in the same transaction (a repeated `ref`
+        is not taken twice; more than the balance → `409`). A refund or cancellation allocated to
+        that payment puts the money back on the same card, once. Needs `X-POS-Staff`.
+        """
+        customer = services.customer_for(customer_id)
+        card = loyalty.gift_card_for(customer)
+        return Response(
+            {
+                "id": str(card.pk),
+                "customerId": str(customer.pk),
+                "last4": card.last4,
+                "balance": card.balance_cents,
+            }
+        )
 
 
 class SoldOutView(PosView):

@@ -11766,6 +11766,80 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorOut'
+  /api/v1/pos/customers/{customer_id}/gift-card:
+    get:
+      operationId: v1_pos_customers_gift_card_retrieve
+      description: |-
+        The customer's gift card (the same balance as the app and BOS), read before taking a
+        gift card payment. `balance` is in cents. Pay with `method: gift` + `giftCardId` = this
+        `id`: the server takes the amount off the card in the same transaction (a repeated `ref`
+        is not taken twice; more than the balance → `409`). A refund or cancellation allocated to
+        that payment puts the money back on the same card, once. Needs `X-POS-Staff`.
+      summary: A customer's gift card
+      parameters:
+      - in: header
+        name: X-Terminal-Id
+        schema:
+          type: string
+        description: This till, e.g. PHILLIP-TILL-1.
+      - in: path
+        name: customer_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - POS · Payments & refunds
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PosGiftCardOut'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorOut'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorOut'
+          description: ''
+        '400':
+          description: 'App error: {error: {code, message, fields}}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorOut'
+        '401':
+          description: 'App error: {error: {code, message, fields}}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorOut'
+        '409':
+          description: 'App error: {error: {code, message, fields}}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorOut'
+        '429':
+          description: 'App error: {error: {code, message, fields}}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorOut'
+        '503':
+          description: 'App error: {error: {code, message, fields}}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorOut'
   /api/v1/pos/customers/{customer_id}/loyalty:
     get:
       operationId: v1_pos_customers_loyalty_retrieve
@@ -20038,6 +20112,24 @@ components:
       required:
       - amount
       - label
+    PosGiftCardOut:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Send as `giftCardId` with a `gift` payment.
+        customerId:
+          type: string
+        last4:
+          type: string
+        balance:
+          type: integer
+          description: Cents left on the card.
+      required:
+      - balance
+      - customerId
+      - id
+      - last4
     PosGroupDtoOut:
       type: object
       properties:
@@ -20630,6 +20722,12 @@ components:
           type: string
           nullable: true
           maxLength: 4
+        giftCardId:
+          type: string
+          nullable: true
+          description: '`method: gift`: the card''s `id` from `GET /customers/{id}/gift-card`.
+            The server takes `amount` off its balance; a refund puts it back.'
+          maxLength: 40
         at:
           type: string
           default: ''
@@ -20684,6 +20782,8 @@ components:
         giftLast4:
           type: string
           nullable: true
+        giftCardId:
+          type: string
         at:
           type: string
         by:

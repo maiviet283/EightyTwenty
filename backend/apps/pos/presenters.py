@@ -363,6 +363,7 @@ def payment(row):
         "by": row.staff_name,
     }
     for key, value in [
+        ("giftCardId", str(row.gift_card_id or "")),
         ("mode", row.split_mode),
         ("items", row.items),
         ("cashPaid", row.cash_paid_cents),

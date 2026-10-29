@@ -83,7 +83,9 @@ cash moves and closing a shift (`cash.out`), editing a customer (`customers`), s
 | `loyalty.applyAction(id, cafe, action)` | `POST /api/v1/pos/customers/{id}/loyalty/actions` | ✅ `{cafe, action: "stamp"\|"redeem"}` |
 | `adjustStock` | — | ⏳ `404`: no stock yet |
 | `loyalty.updateSettings` | — | ⏳ `404`: the card rule (9 stamps, 10th free) is fixed, shared with the app |
-| `giftCards.issue`, `giftCards.adjustBalance` | — | ⏳ needs the gift card provider (Square) — `404` |
+| (read a customer's gift card) | `GET /api/v1/pos/customers/{id}/gift-card` | ✅ `{id, customerId, last4, balance}` (cents, needs `X-POS-Staff`) |
+| `payments.record` with `method: gift` | `POST /api/v1/pos/orders/{id}/payments` | ✅ send `giftCardId`; the server takes it off the balance (section 5) |
+| `giftCards.issue`, `giftCards.adjustBalance` | — | ⏳ selling cards needs the gift card provider (Square) — `404`; the chain owner tops up in BOS |
 | `staffAuth.createStaff`, `setRole`, `setRoleMatrix` | — | ⏳ `404`: people and PINs are managed in BOS |
 | `records.requestTaxInvoice` | — | ❌ no invoicing service yet (`404`) |
 
@@ -154,6 +156,12 @@ staff and can be shown as is. The HTTP status drives the till's `ApiError.kind`:
   their stamps (and the free coffee they use) from the server once fully paid, and back on a refund — the
   till must not also send `loyalty.balance` for them. Without it, the till's own `loyalty.balance` command
   after payment does it.
+- **Gift card = the app's gift card** (one per customer, topped up in BOS, same balance in the app).
+  `GET /customers/{id}/gift-card` gives its `id` and `balance` (cents). A payment with `method: gift` and
+  `giftCardId` takes `amount` off that card in the same transaction (a repeated `ref` is not taken twice;
+  more than the balance → `409`, nothing taken). A refund, void or cancellation allocated to that payment
+  (`alloc` row with its `ref`) puts the money back on the same card once per adjustment `key`; a full refund
+  without `alloc` returns what is left of every gift card payment, a partial one needs `alloc` (`422`).
 - **Sold out:** the snapshot's `availability.soldOut` lists items sold out at every café of this account,
   `branchOff[cafe]` those sold out only here. Changes reach the website, the app and BOS at once.
 

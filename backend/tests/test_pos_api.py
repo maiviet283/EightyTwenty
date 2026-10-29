@@ -206,7 +206,7 @@ def test_pins_are_unique_and_scoped_to_the_cafes(cafe, elsewhere, cashier):
     manager = UserFactory(role="manager")
     StaffAssignment.objects.create(user=manager, location=cafe)
     permissions = pins.permissions(manager)
-    expected = set(pins.ROLES["manager"]["perms"]) | {"loyalty.stamp"}
+    expected = set(pins.ROLES["manager"]["perms"]) | {"loyalty.stamp", "gift.redeem"}
     assert set(permissions) == expected
     assert len(permissions) == len(expected)
     assert pins.till_role(UserFactory(role="owner")) == "admin"
@@ -343,11 +343,90 @@ def test_order_numbers_are_unique_and_retries_replay(till, cafe, menu):
     assert CommandReceipt.objects.filter(key="CMD-1", status_code=201).count() == 1
 
 
-def test_create_with_a_gift_card_payment(till, cafe, menu, staff_session):
+@pytest.fixture
+def gift_card(db):
+    customer = UserFactory(role="customer")
+    return GiftCard.objects.create(user=customer, last4="4471", balance_cents=5000)
+
+
+def test_create_with_a_gift_card_payment(till, cafe, menu, staff_session, gift_card):
     gift = {"method": "gift", "amount": 1000, "tip": 0, "surcharge": 0, "ref": "G1",
-            "giftLast4": "4471"}  # fmt: skip
+            "giftCardId": str(gift_card.pk)}  # fmt: skip
     data = create(till, payments=[gift])
     assert data["payments"][0]["giftLast4"] == "4471" and data["methods"] == ["gift"]
+    assert data["payments"][0]["giftCardId"] == str(gift_card.pk)
+    gift_card.refresh_from_db()
+    assert gift_card.balance_cents == 4000
+    spent = gift_card.activity.get()
+    assert spent.kind == "spent" and spent.amount_cents == 1000
+
+
+def test_till_reads_a_customers_gift_card(till, cafe, staff_session, gift_card):
+    response = till.get(f"{BASE}/customers/{gift_card.user_id}/gift-card")
+    assert response.status_code == 200, response.data
+    assert response.json() == {
+        "id": str(gift_card.pk),
+        "customerId": str(gift_card.user_id),
+        "last4": "4471",
+        "balance": 5000,
+    }
+    till.credentials(HTTP_X_TERMINAL_ID=TERMINAL)
+    assert till.get(f"{BASE}/customers/{gift_card.user_id}/gift-card").status_code == 403
+
+
+def test_gift_card_payment_takes_the_balance_once(till, cafe, menu, staff_session, gift_card):
+    number = create(till)["id"]
+    card = str(gift_card.pk)
+    first = pay(till, number, 1500, ref="G1", method="gift", giftCardId=card)
+    again = pay(till, number, 1500, ref="G1", method="gift", giftCardId=card)
+    assert first.status_code == again.status_code == 200, again.data
+    gift_card.refresh_from_db()
+    assert gift_card.balance_cents == 3500 and gift_card.activity.count() == 1
+
+    gift_card.balance_cents = 1000
+    gift_card.save()
+    too_much = pay(till, number, 2000, ref="G2", method="gift", giftCardId=card)
+    assert too_much.status_code == 409 and "$10.00 left" in too_much.json()["error"]["message"]
+    missing = pay(till, number, 100, ref="G3", method="gift")
+    assert missing.status_code == 422
+    wrong = pay(till, number, 100, ref="G4", method="gift", giftCardId=card, giftLast4="0000")
+    assert wrong.status_code == 422
+    gift_card.refresh_from_db()
+    assert gift_card.balance_cents == 1000
+
+
+def test_refund_goes_back_to_the_same_gift_card(till, cafe, menu, refund_session, gift_card):
+    number = create(till)["id"]
+    card = str(gift_card.pk)
+    assert pay(till, number, 2000, ref="G1", method="gift", giftCardId=card).status_code == 200
+    assert pay(till, number, 1560, ref="C1", method="card").status_code == 200
+    path = f"/orders/{quote(number)}/adjustments"
+
+    def refund(key, alloc, amount):
+        return post(till, path, {
+            "adjustment": {"key": key, "mode": "refund", "amount": amount, "alloc": alloc},
+            "lines": [{"key": "L1", "qty": 2}, {"key": "L2", "qty": 1}],
+            "total": 35.6, "status": "new"})  # fmt: skip
+
+    part = [{"method": "gift", "amount": 500, "ref": "G1", "giftLast4": "4471"}]
+    assert refund("R1", part, 500).status_code == 200
+    assert refund("R1", part, 500).status_code == 200  # a retry is not refunded twice
+    gift_card.refresh_from_db()
+    assert gift_card.balance_cents == 3500
+    assert gift_card.activity.filter(kind="added").get().amount_cents == 500
+
+    no_alloc = refund("R2", [], 1000)
+    assert no_alloc.status_code == 422 and no_alloc.json()["error"]["fields"] == {
+        "alloc": "required"
+    }
+
+    cancel = post(till, path, {
+        "adjustment": {"key": "R3", "mode": "cancel", "amount": 3060},
+        "lines": [{"key": "L1", "qty": 0}, {"key": "L2", "qty": 0}],
+        "total": 0, "status": "cancelled"})  # fmt: skip
+    assert cancel.status_code == 200, cancel.data
+    gift_card.refresh_from_db()
+    assert gift_card.balance_cents == 5000
 
 
 def test_payments_are_idempotent_and_capped(till, cafe, menu, staff_session):

@@ -188,6 +188,14 @@ class OrderPayment(BaseModel):
     surcharge_cents = models.PositiveIntegerField(default=0)
     reference = models.CharField(max_length=80)
     gift_last4 = models.CharField(max_length=4, blank=True)
+    gift_card = models.ForeignKey(
+        "loyalty.GiftCard",
+        on_delete=models.PROTECT,
+        related_name="till_payments",
+        null=True,
+        blank=True,
+        help_text="The gift card this payment was taken from (refunds go back to it).",
+    )
     split_mode = models.CharField(max_length=10, blank=True)
     items = models.JSONField(default=dict, blank=True)
     cash_paid_cents = models.PositiveIntegerField(null=True, blank=True)

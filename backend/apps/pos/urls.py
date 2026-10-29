@@ -27,6 +27,7 @@ urlpatterns = [
     path("audit", v.AuditView.as_view()),
     path("customers/<str:customer_id>", v.CustomerView.as_view()),
     path("customers/<str:customer_id>/loyalty", v.CustomerLoyaltyView.as_view()),
+    path("customers/<str:customer_id>/gift-card", v.CustomerGiftCardView.as_view()),
     path("items/<str:item_id>/sold-out", v.SoldOutView.as_view()),
     path(
         "locations/<slug:slug>/items/<str:item_id>/availability", v.CafeAvailabilityView.as_view()

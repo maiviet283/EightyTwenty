@@ -68,6 +68,8 @@ def permissions(user):
     perms = list(ROLES[till_role(user)]["perms"])
     if "loyalty" in perms and "loyalty.stamp" not in perms:
         perms.append("loyalty.stamp")
+    if "gift" in perms and "gift.redeem" not in perms:
+        perms.append("gift.redeem")
     return perms
 
 

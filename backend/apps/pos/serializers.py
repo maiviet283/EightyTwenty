@@ -89,6 +89,14 @@ class PosPaymentIn(serializers.Serializer):
     giftLast4 = serializers.CharField(
         max_length=4, required=False, allow_null=True, allow_blank=True
     )
+    giftCardId = serializers.CharField(
+        max_length=40,
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+        help_text="`method: gift`: the card's `id` from `GET /customers/{id}/gift-card`. The "
+        "server takes `amount` off its balance; a refund puts it back.",
+    )
     at = text(40)
     by = text(120)
     mode = serializers.ChoiceField(choices=SPLIT_MODES, required=False)
@@ -314,6 +322,13 @@ class PosLoyaltyBalanceOut(serializers.Serializer):
     rewards = serializers.IntegerField(help_text="Free coffees ready to redeem (they add up).")
 
 
+class PosGiftCardOut(serializers.Serializer):
+    id = serializers.CharField(help_text="Send as `giftCardId` with a `gift` payment.")
+    customerId = serializers.CharField()
+    last4 = serializers.CharField()
+    balance = serializers.IntegerField(help_text="Cents left on the card.")
+
+
 class PosSoldOutIn(serializers.Serializer):
     soldOut = serializers.BooleanField()
 
@@ -449,6 +464,7 @@ class PosPaymentOut(serializers.Serializer):
     surcharge = serializers.IntegerField()
     ref = serializers.CharField()
     giftLast4 = serializers.CharField(allow_null=True)
+    giftCardId = serializers.CharField(required=False)
     at = serializers.CharField(allow_blank=True)
     by = serializers.CharField(allow_blank=True)
     mode = serializers.CharField(required=False)

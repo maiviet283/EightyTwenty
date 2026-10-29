@@ -30,7 +30,7 @@ from apps.core.services import audit, snapshot
 from apps.enquiries.models import CateringPackage, Enquiry
 from apps.locations.models import Location
 from apps.loyalty import services as loyalty
-from apps.loyalty.models import STAMPS_PER_REWARD
+from apps.loyalty.models import STAMPS_PER_REWARD, GiftCard, GiftCardActivity
 from apps.menu.catalog import menu_items
 from apps.menu.models import Category, LocationModifierAvailability, MenuItem
 from apps.menu.services import set_availability
@@ -235,6 +235,63 @@ def customer_of(customer_id):
         return None
 
 
+def till_gift_card(card_id):
+    """The gift card a `gift` payment is taken from, locked until the payment is saved."""
+    if not card_id:
+        raise invalid("Choose the customer's gift card.", giftCardId="required")
+    try:
+        card = (
+            GiftCard.objects.select_for_update()
+            .filter(pk=card_id, user__role="customer", user__is_active=True)
+            .first()
+        )
+    except (ValueError, TypeError, ValidationError):
+        card = None
+    if card is None:
+        raise invalid("That gift card was not found.", giftCardId="invalid")
+    return card
+
+
+def restore_gift_cards(order, adjustment, refundable):
+    """Puts a refund back on the gift cards it was paid from (once per adjustment and payment)."""
+    payments = {
+        payment.reference: payment
+        for payment in order.payments.filter(gift_card__isnull=False).select_related("gift_card")
+    }
+    if not payments or not adjustment.amount_cents:
+        return
+    rows = adjustment.allocation
+    if not rows:
+        if adjustment.amount_cents < refundable:
+            raise invalid(
+                "A partial refund on a gift card payment needs the payment allocation.",
+                alloc="required",
+            )
+        used = {}
+        for previous in order.adjustments.exclude(pk=adjustment.pk):
+            for row in previous.allocation:
+                used[row.get("ref")] = used.get(row.get("ref"), 0) + (row.get("amount") or 0)
+        rows = [
+            {"ref": ref, "amount": payment.amount_cents - used.get(ref, 0)}
+            for ref, payment in payments.items()
+        ]
+    for row in rows:
+        payment = payments.get(row.get("ref"))
+        amount = row.get("amount") or 0
+        if payment is None or amount <= 0:
+            continue
+        card = GiftCard.objects.select_for_update().get(pk=payment.gift_card_id)
+        card.balance_cents += amount
+        card.save(update_fields=["balance_cents", "updated_at"])
+        GiftCardActivity.objects.create(
+            card=card,
+            kind="added",
+            description=f"Refunded from order {order.number}",
+            amount_cents=amount,
+            idempotency_key=f"pos-refund:{adjustment.pk}:{payment.pk}",
+        )
+
+
 @transaction.atomic
 def create_order(request, data):
     user = request.user
@@ -367,6 +424,13 @@ def record_payment(request, order, data, save=True):
     staff = require_staff_permission(request, "pos", order.location)
     actor = staff.get_full_name().strip() or staff.email
     data = {**data, "by": actor}
+    gift = None
+    if data["method"] == "gift":
+        require_staff_permission(request, "gift.redeem", order.location)
+        gift = till_gift_card(data.get("giftCardId"))
+        if data.get("giftLast4") and data["giftLast4"] != gift.last4:
+            raise invalid("The gift card number doesn’t match this card.", giftLast4="invalid")
+        data["giftLast4"] = gift.last4
     existing = order.payments.filter(reference=data["ref"]).first()
 
     if existing is not None:
@@ -376,6 +440,7 @@ def record_payment(request, order, data, save=True):
             "tip_cents": data.get("tip") or 0,
             "surcharge_cents": data.get("surcharge") or 0,
             "gift_last4": data.get("giftLast4") or "",
+            "gift_card_id": gift.pk if gift else None,
             "split_mode": data.get("mode") or "",
             "items": data.get("items") or {},
             "cash_paid_cents": data.get("cashPaid"),
@@ -422,7 +487,14 @@ def record_payment(request, order, data, save=True):
             )
         if shift.status != "open":
             raise AppError("CONFLICT", "This cash shift is already closed.", 409)
-    OrderPayment.objects.create(
+    if gift is not None and gift.balance_cents < data["amount"]:
+        raise AppError(
+            "CONFLICT",
+            f"Gift card ·· {gift.last4} has {money(gift.balance_cents)} left, "
+            f"less than the {money(data['amount'])} asked.",
+            409,
+        )
+    payment = OrderPayment.objects.create(
         order=order,
         shift=shift,
         method=data["method"],
@@ -431,6 +503,7 @@ def record_payment(request, order, data, save=True):
         surcharge_cents=data.get("surcharge") or 0,
         reference=data["ref"],
         gift_last4=data.get("giftLast4") or "",
+        gift_card=gift,
         split_mode=data.get("mode") or "",
         items=data.get("items") or {},
         cash_paid_cents=data.get("cashPaid"),
@@ -440,6 +513,16 @@ def record_payment(request, order, data, save=True):
         taken_at=data.get("at") or "",
         terminal_id=terminal_of(request),
     )
+    if gift is not None:
+        gift.balance_cents -= payment.amount_cents
+        gift.save(update_fields=["balance_cents", "updated_at"])
+        GiftCardActivity.objects.create(
+            card=gift,
+            kind="spent",
+            description=f"Used at {order.location.name} · order {order.number}",
+            amount_cents=payment.amount_cents,
+            idempotency_key=f"pos-pay:{payment.pk}",
+        )
     if data.get("surcharge"):
         order.surcharge_cents += data["surcharge"]
     if save:
@@ -665,6 +748,7 @@ def adjust(request, order, data):
         made_at=change.get("at") or "",
         terminal_id=terminal_of(request),
     )
+    restore_gift_cards(order, adjustment, refundable)
     if (
         order.channel == "pos"
         and order.pos_loyalty_managed
