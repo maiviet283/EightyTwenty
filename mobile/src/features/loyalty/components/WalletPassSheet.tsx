@@ -14,7 +14,7 @@ import { showToast, useUiStore } from '@/store/ui';
 import { colors, creamA, eyebrow, fontFamilies, serif, shadows, sans } from '@/theme';
 import { useAddWalletPass, useLoyaltyCard } from '../hooks';
 
-const WORDMARK = require('../../../../assets/branding/wordmark-white.webp');
+const LOGO = require('../../../../assets/branding/logo-stacked-white.webp');
 
 /**
  * Apple Wallet "Add pass" sheet styled like the iOS add-pass card.
@@ -57,7 +57,7 @@ export function WalletPassSheet() {
       <View style={[styles.body, { paddingBottom: Math.max(34, insets.bottom + 12) }]}>
         <View style={styles.pass}>
           <View style={styles.passTop}>
-            <Image source={WORDMARK} style={styles.wordmark} contentFit="contain" accessibilityLabel="eighty twenty" />
+            <Image source={LOGO} style={styles.logo} contentFit="contain" accessibilityLabel="eighty twenty" />
             <Text style={[eyebrow(9, 0.2), { color: colors.sand }]}>Coffee card</Text>
           </View>
           <View style={styles.passMid}>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   body: { paddingTop: 6, paddingHorizontal: 18 },
   pass: { padding: 18, borderRadius: 14, backgroundColor: colors.espresso, ...shadows.walletPass },
   passTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
-  wordmark: { height: 12, width: 78 },
+  logo: { height: 30, width: 42 },
   passMid: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12, marginTop: 18 },
   count: { flexDirection: 'row', alignItems: 'baseline', gap: 4 },
   cells: { flexDirection: 'row', gap: 4, marginTop: 14 },

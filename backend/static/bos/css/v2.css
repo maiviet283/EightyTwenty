@@ -712,3 +712,10 @@
     .bos-team-person .bos-team-tags { width: 100%; padding-left: 3rem; }
 }
 @media (max-width: 1023px) { .bos-team-page .bos-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- brand: the website's own logo everywhere ---------------------- */
+.bos-brand-word { height: 2.25rem; width: auto; filter: none; }
+.bos-login-brand img { height: 3.6rem; width: auto; padding: 0.55rem 0.7rem; border-radius: 12px; background: rgba(252, 249, 244, 0.96); filter: none; }
+.bos-login-mobile-logo { height: 2.4rem; }
+:root[data-theme="dark"] .bos-login-mobile-logo.bos-show-light, :root[data-theme="light"] .bos-login-mobile-logo.bos-show-dark, :root:not([data-theme]) .bos-login-mobile-logo.bos-show-dark { display: none; }
+.bos-brand-tile { border-radius: 50%; background: var(--bos-surface); }

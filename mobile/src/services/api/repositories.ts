@@ -17,6 +17,7 @@ import type {
   SignInRequest,
   SignUpRequest,
 } from '@/repositories/contracts';
+import { isHiddenLocation, publicLocations } from '@/domain/locations';
 import { AppError, isTransientError } from '@/services/errors';
 import type {
   CardTokenResult,
@@ -134,9 +135,10 @@ export class HttpPreferencesRepository implements PreferencesRepository {
 export class HttpLocationRepository implements LocationRepository {
   constructor(private readonly http: HttpClient) {}
   async getLocations(): Promise<Location[]> {
-    return (await this.http.get<D.LocationDTO[]>(endpoints.locations, { auth: false })).map(M.locationFromDto);
+    return publicLocations((await this.http.get<D.LocationDTO[]>(endpoints.locations, { auth: false })).map(M.locationFromDto));
   }
   async getLocation(id: ID): Promise<Location> {
+    if (isHiddenLocation(id)) throw new AppError('NOT_FOUND', 'That café could not be found.', { status: 404 });
     return M.locationFromDto(await this.http.get<D.LocationDTO>(endpoints.location(id), { auth: false }));
   }
 }

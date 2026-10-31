@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -8,10 +9,12 @@ import { Button } from '@/components/ui/Button';
 import { Text } from '@/components/ui/Text';
 import { useSessionStore } from '@/store/session';
 import { showToast } from '@/store/ui';
-import { colors, inkA, serif, serifItalic } from '@/theme';
+import { colors, inkA, serifItalic } from '@/theme';
 import { AuthSheet } from '../components/AuthSheet';
 import { FoodOrbitHeadline, FoodOrbitStage, useFoodOrbit } from '../components/FoodOrbit';
 import type { AuthMode } from '../validation';
+
+const LOGO = require('../../../../assets/branding/logo-stacked-brown.webp');
 
 /** Welcome: wordmark, tagline, rotating food hero, Log in / Sign up. */
 export function WelcomeScreen() {
@@ -43,13 +46,11 @@ export function WelcomeScreen() {
   );
 }
 
-/** "EIGHTY / twenty" wordmark set in Newsreader with the red slash. */
+/** The official stacked "eighty twenty" logo, the same artwork as the website and BOS. */
 export function Wordmark() {
   return (
     <View style={styles.wordmark} accessibilityRole="header" accessibilityLabel="EightyTwenty">
-      <Text style={[serif(24, 400, undefined, 0.22), styles.upper]}>Eighty</Text>
-      <View style={styles.slash} />
-      <Text style={[serifItalic(14, 400, undefined, 0.14), styles.upper]}>Twenty</Text>
+      <Image source={LOGO} style={styles.logo} contentFit="contain" />
     </View>
   );
 }
@@ -57,9 +58,8 @@ export function Wordmark() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.creamWarm, overflow: 'hidden' },
   top: { flex: 1, minHeight: 0, paddingHorizontal: 16, alignItems: 'center' },
-  wordmark: { flexDirection: 'row', alignItems: 'baseline' },
-  upper: { textTransform: 'uppercase', color: colors.ink },
-  slash: { width: 1, height: 22.8, alignSelf: 'center', backgroundColor: colors.brandRed, transform: [{ rotate: '18deg' }], marginLeft: 2.4, marginRight: 7.2 },
+  wordmark: { alignItems: 'center' },
+  logo: { width: 96, height: 68 },
   tagline: { marginTop: 24, color: colors.brandRed, textAlign: 'center' },
   actions: { zIndex: 40, gap: 10, paddingTop: 40, paddingHorizontal: 20, backgroundColor: colors.creamWarm },
   signup: { borderColor: inkA(0.28) },

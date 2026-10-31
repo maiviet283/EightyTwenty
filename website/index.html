@@ -96,6 +96,92 @@
   [data-locrow]:hover{background:#ECE4D6!important}
   [data-locrow]:hover [data-arrow]{transform:translateX(4px);color:#8B5827}
   @keyframes locTextIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  /* Our cafés — ported from the app's Locations screens (CafesScreen / CafeDetailScreen / CafeRail) */
+  .e82-cafes{max-width:1120px;margin:0 auto;padding:0 20px 92px}
+  .e82-screen-head{display:flex;align-items:center;justify-content:center;height:48px}
+  .e82-screen-head h1{margin:0;font:600 16px/1.2 Figtree;color:#1C1814}
+  .e82-rail{position:relative;height:226px;margin:14px 0 0;container-type:inline-size;touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none;--e82-photo:172px}
+  .e82-rail:focus-visible{box-shadow:0 0 0 3px rgba(182,122,75,.35);border-radius:6px}
+  .e82-slide{position:absolute;top:0;left:0;bottom:0;width:100%;overflow:hidden}
+  .e82-slide-inner{position:absolute;top:0;left:0;bottom:0;width:100cqw}
+  .e82-slide.is-active:not(.is-first){animation:e82RailWipe .72s cubic-bezier(.2,.8,.2,1) both}
+  .e82-slide.is-active:not(.is-first) .e82-rail-img{animation:e82RailImg .72s cubic-bezier(.2,.8,.2,1) both}
+  .e82-slide.is-active:not(.is-first) .e82-rail-cap{animation:e82RailCap .55s cubic-bezier(.2,.8,.2,1) .22s both}
+  .e82-slide.is-leaving{animation:e82RailOut .45s cubic-bezier(.25,.1,.25,1) .25s both;pointer-events:none}
+  @keyframes e82RailWipe{from{width:0}to{width:100%}}
+  @keyframes e82RailImg{from{transform:translateX(-16px)}to{transform:none}}
+  @keyframes e82RailCap{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes e82RailOut{from{opacity:1}to{opacity:0}}
+  .e82-rail-card{display:block;width:100%;height:100%;padding:7px 7px 0;border:1px solid rgba(28,24,20,.26);border-radius:4px;background:#FCF9F4;color:#1C1814;text-align:left;cursor:pointer;transition:transform .18s ease}
+  .e82-rail-card:active{transform:scale(.985)}
+  .e82-rail-photo{position:relative;height:var(--e82-photo);border-radius:2px;overflow:hidden;background:#E3D9C8}
+  .e82-rail-img{display:block;width:100%;height:100%;object-fit:cover}
+  .e82-rail-pos{position:absolute;top:8px;right:8px;padding:5px 7px;border-radius:3px;background:rgba(252,249,244,.92);font:600 10px/1 Figtree;letter-spacing:.1em;color:#1C1814}
+  .e82-rail-cap{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:9px 4px 0}
+  .e82-rail-name{font:400 22px/1.1 'Newsreader',serif;letter-spacing:-.012em;color:#1C1814}
+  .e82-status{display:inline-flex;align-items:center;gap:5px;font:500 11.5px/1 Figtree;white-space:nowrap}
+  .e82-status i{width:6px;height:6px;border-radius:3px}
+  .e82-rail-dots{display:flex;justify-content:center;gap:6px;position:absolute;left:0;right:0;bottom:-16px}
+  .e82-rail-dots i{width:5px;height:5px;border-radius:50%;background:rgba(28,24,20,.18);transition:background .3s,transform .3s}
+  .e82-rail-dots i.is-on{background:#B67A4B;transform:scale(1.3)}
+  .e82-featured{display:grid;gap:0;margin-top:34px}
+  .e82-featured-photo{display:block;width:100%;height:236px;padding:0;border:0;border-radius:16px;overflow:hidden;background:#ECE4D7;cursor:pointer}
+  .e82-featured-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 48%}
+  .e82-title-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:14px}
+  .e82-title-row h2,.e82-title-row h1{margin:0;font:400 30px/1 'Newsreader',serif;color:#1C1814}
+  .e82-title-row .e82-status{font-size:12px}
+  .e82-eyebrow{margin:8px 0 0;font:600 10px/1 Figtree;letter-spacing:.12em;text-transform:uppercase;color:#8B5827}
+  .e82-meta{margin:8px 0 0;font:400 13px/1.45 Figtree;color:#574A40}
+  .e82-actions{display:flex;flex-wrap:wrap;gap:8px;padding-top:14px}
+  .e82-btn{flex:1 1 140px;display:grid;place-items:center;height:48px;padding:0 16px;border-radius:12px;font:600 14px/1 Figtree;cursor:pointer;text-decoration:none;transition:transform .15s ease,opacity .15s ease}
+  .e82-btn:active{transform:scale(.985)}
+  .e82-btn.is-primary{border:0;background:#1C1814;color:#FCF9F4}
+  .e82-btn.is-outline{border:1px solid rgba(28,24,20,.18);background:transparent;color:#1C1814}
+  .e82-across{margin:34px 0 0;font:600 17px/1.25 Figtree;letter-spacing:-.01em;color:#1C1814}
+  .e82-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px;row-gap:20px;padding-top:14px}
+  .e82-cell{display:grid;gap:0;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;color:#1C1814}
+  .e82-square{aspect-ratio:1;border-radius:12px;overflow:hidden;background:#ECE4D7}
+  .e82-square img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.22,1,.36,1)}
+  .e82-cell:hover .e82-square img{transform:scale(1.03)}
+  .e82-cell-name{margin-top:9px;font:400 20px/1.1 'Newsreader',serif;color:#1C1814}
+  .e82-cell-area{margin-top:3px;font:400 12px/1.3 Figtree;color:#574A40}
+  .e82-cell-status{margin-top:3px;font:500 12px/1.3 Figtree}
+  .e82-detail{animation:rise .34s cubic-bezier(.2,.8,.2,1) both}
+  .e82-hero{position:relative;height:330px;background:#ECE4D7}
+  .e82-hero img{display:block;width:100%;height:100%;object-fit:cover}
+  .e82-back{position:absolute;left:14px;top:14px;width:40px;height:40px;border:0;border-radius:20px;background:#FCF9F4;color:#1C1814;font:400 18px/1 Figtree;cursor:pointer;box-shadow:0 2px 10px rgba(28,24,20,.18)}
+  .e82-detail-body{max-width:760px;margin:0 auto;padding:20px 20px 92px}
+  .e82-detail .e82-eyebrow{margin:0}
+  .e82-detail .e82-title-row{margin-top:10px}
+  .e82-detail .e82-title-row h1{font-size:34px;letter-spacing:-.01em}
+  .e82-address{margin:10px 0 0;font:400 14px/1.5 Figtree;color:#574A40}
+  .e82-detail .e82-actions{padding-top:18px}
+  .e82-soon{margin-top:16px;padding:12px 14px;border-radius:12px;background:#ECE4D7;font:500 13px/1.45 Figtree;color:#1C1814}
+  .e82-info{margin-top:22px;padding:4px 16px;border:1px solid rgba(28,24,20,.08);border-radius:14px;background:#FCF9F4}
+  .e82-info-row{display:flex;gap:12px;padding:12px 0;font:400 14px/1.45 Figtree;color:#1C1814;text-decoration:none}
+  .e82-info-row+.e82-info-row{border-top:1px solid rgba(28,24,20,.07)}
+  .e82-info-label{width:88px;flex:none;color:#74655A}
+  .e82-info-value{flex:1}
+  a.e82-info-row .e82-info-value{font-weight:500}
+  .e82-info-row.is-accent .e82-info-value{font-weight:600;color:#8B5827}
+  .e82-note{margin:22px 0 0;font:italic 400 clamp(20px,2.2vw,26px)/1.35 Figtree;color:#4B2E26}
+  .e82-gf{margin:16px 0 0;font:400 15px/1.55 Figtree;color:#4B2E26}
+  @media (min-width:700px){.e82-grid{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:16px}}
+  @media (min-width:900px){
+    .e82-cafes{padding-top:12px}
+    .e82-screen-head{height:64px}.e82-screen-head h1{font-size:20px}
+    .e82-rail{height:460px;--e82-photo:400px}
+    .e82-rail-name{font-size:28px}.e82-rail-cap{padding:12px 6px 0}
+    .e82-featured{grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:36px;align-items:center;margin-top:56px}
+    .e82-featured-photo{height:380px}
+    .e82-featured-body .e82-title-row{margin-top:0}.e82-featured-body h2{font-size:44px}
+    .e82-across{margin-top:56px;font-size:20px}
+    .e82-grid{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:20px;row-gap:28px;padding-top:18px}
+    .e82-cell-name{font-size:22px}
+    .e82-hero{height:clamp(330px,42vw,520px)}
+    .e82-detail-body{padding-top:28px}.e82-detail .e82-title-row h1{font-size:44px}
+  }
+  @media (prefers-reduced-motion:reduce){.e82-slide,.e82-rail-img,.e82-rail-cap,.e82-detail{animation:none!important}}
   [data-parallax]{will-change:transform}
   [data-zoom]{overflow:hidden}[data-zoom] img{transition:transform 1.2s cubic-bezier(.22,1,.36,1)}[data-zoom]:hover img{transform:scale(1.03)}
   @media (prefers-reduced-motion:reduce){[data-reveal],[data-reveal-stagger]>*,[data-reveal-line],[data-reveal-vline]{opacity:1;transform:none;clip-path:none;transition:none}[data-parallax]{transform:none!important}[data-zoom]:hover img{transform:none}}
@@ -477,117 +563,12 @@
 
   <!-- ============ LOCATIONS ============ -->
   <sc-if value="{{ isLocations }}" hint-placeholder-val="{{ false }}">
-    <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}"><main data-screen-label="Locations" style="max-width:640px;margin:0 auto;padding:24px 16px 92px"><sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">
-      <section style="display:grid;gap:0">
-        <div style="position:relative;aspect-ratio:4/3;overflow:hidden;border-radius:8px;background:#ECE4D6">
-          <img data-src="{{ featuredPhillip.imgSrc }}" alt="EightyTwenty Phillip storefront" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 48%;display:block">
-        </div>
-        <div style="padding:20px 0 0">
-          <h1 style="margin:0;font:300 42px/1 'Newsreader',serif;color:#3A2B24">Phillip</h1>
-          <p style="margin:6px 0 0;font:400 15px/1.4 Figtree;color:#7A6259">{{ featuredPhillip.sub }}</p>
-          <p style="margin:20px 0 0;font:400 15px/1.5 Figtree;color:#3A2B24">{{ featuredPhillip.address }}</p>
-          <p style="margin:4px 0 0;font:400 14px/1.4 Figtree;color:#7A6259">{{ featuredPhillip.hoursShort }}</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px">
-            <a href="{{ featuredPhillip.mapsHref }}" target="_blank" rel="noopener" style="display:grid;place-items:center;height:46px;border-radius:999px;border:1px solid rgba(75,46,38,.22);color:#4B2E26;font:500 14px/1 Figtree">Directions</a>
-            <button type="button" onClick="{{ phillipReserve }}" style="height:46px;border-radius:999px;border:0;background:#4B2E26;color:#F3EEE5;font:500 14px/1 Figtree;cursor:pointer">Reserve</button>
-          </div>
-          <button type="button" onClick="{{ viewPhillip }}" style="display:block;margin-top:14px;padding:8px 0;border:0;background:transparent;color:#4B2E26;font:500 14px/1 Figtree;text-decoration:underline;text-underline-offset:4px;cursor:pointer">View café details →</button>
-        </div>
-      </section>
-      <section style="margin-top:44px">
-        <h2 style="margin:0;padding-bottom:14px;border-bottom:1px solid rgba(75,46,38,.16);font:400 24px/1.1 'Newsreader',serif;color:#3A2B24">Other cafés</h2>
-        <div>
-          <sc-for list="{{ mobileOtherLocs }}" as="l" hint-placeholder-count="0">
-            <button type="button" onClick="{{ l.view }}" style="width:100%;display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 0;border:0;border-bottom:1px solid rgba(75,46,38,.12);background:transparent;color:#3A2B24;text-align:left;cursor:pointer">
-              <img data-src="{{ l.imgSrc }}" alt="" style="display:block;width:76px;height:72px;object-fit:cover;border-radius:6px">
-              <span style="display:grid;gap:4px;min-width:0"><span style="font:400 21px/1.1 'Newsreader',serif">{{ l.name }}</span><span style="font:400 12px/1.35 Figtree;color:#7A6259">{{ l.subShort }}</span><span style="font:400 12px/1.35 Figtree;color:#4B2E26">{{ l.address }}</span><span style="font:400 12px/1.35 Figtree;color:#7A6259">{{ l.hoursTiny }}</span></span>
-              <span aria-hidden="true" style="font:400 20px/1 Figtree;color:#7A6259">→</span>
-            </button>
-          </sc-for>
-        </div>
-      </section>
-    </sc-if></main></sc-if>
-    <sc-if value="{{ wide }}" hint-placeholder-val="{{ false }}"><main data-screen-label="Locations" style="max-width:1400px;margin:0 auto;padding:clamp(28px,4vw,56px) clamp(16px,3vw,40px) 80px"><sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">
-      <p style="margin:0 0 12px;font:500 11px/1 Figtree;letter-spacing:.18em;text-transform:uppercase;color:#8B5827">Locations</p>
-      <h1 style="margin:0;font:300 clamp(38px,5vw,68px)/1 'Newsreader',serif;letter-spacing:-.01em;text-wrap:balance">Find your nearest EightyTwenty café in Canberra.</h1>
-      <p style="margin:14px 0 0;max-width:56ch;font:400 16px/1.5 Figtree;color:#7A6259">Ten cafés. Choose one to see hours, directions and bookings.</p>
-      <section style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:clamp(28px,5vw,72px);align-items:center;margin-top:clamp(32px,4vw,56px);padding-bottom:clamp(36px,5vw,64px);border-bottom:1px solid rgba(75,46,38,.16)">
-        <div style="height:clamp(390px,42vw,570px);overflow:hidden;border-radius:8px;background:#ECE4D6"><img data-src="{{ featuredPhillip.imgSrc }}" alt="EightyTwenty Phillip storefront" style="display:block;width:100%;height:100%;object-fit:cover;object-position:center 46%"></div>
-        <div>
-          <h2 style="margin:0;font:300 clamp(52px,5.5vw,76px)/1 'Newsreader',serif;color:#3A2B24">Phillip</h2>
-          <p style="margin:12px 0 0;font:400 16px/1.5 Figtree;color:#7A6259">{{ featuredPhillip.sub }}</p>
-          <p style="margin:30px 0 0;font:400 16px/1.5 Figtree;color:#3A2B24">{{ featuredPhillip.address }}</p>
-          <p style="margin:8px 0 0;font:400 15px/1.5 Figtree;color:#7A6259">{{ featuredPhillip.hours }}</p>
-          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:30px">
-            <a href="{{ featuredPhillip.mapsHref }}" target="_blank" rel="noopener" style="display:grid;place-items:center;min-width:120px;height:46px;padding:0 16px;border:1px solid rgba(75,46,38,.22);border-radius:999px;color:#4B2E26;font:500 14px/1 Figtree">Directions</a>
-            <button type="button" onClick="{{ phillipReserve }}" style="min-width:120px;height:46px;padding:0 16px;border:0;border-radius:999px;background:#4B2E26;color:#F3EEE5;font:500 14px/1 Figtree;cursor:pointer">Reserve</button>
-          </div>
-          <button type="button" onClick="{{ viewPhillip }}" style="display:block;margin-top:16px;padding:8px 0;border:0;background:transparent;color:#4B2E26;font:500 14px/1 Figtree;text-decoration:underline;text-underline-offset:4px;cursor:pointer">Visit Phillip →</button>
-        </div>
-      </section>
-      <h2 style="margin:clamp(36px,5vw,60px) 0 0;font:300 38px/1 'Newsreader',serif;color:#3A2B24">Other cafés</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(24px,4vw,56px);margin-top:22px;align-items:start">
-        <div data-reveal-stagger style="display:grid">
-          <sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}"><sc-for list="{{ otherLocations }}" as="l" hint-placeholder-count="0">
-            <button type="button" onClick="{{ l.select }}" data-locrow aria-pressed="{{ l.on }}" style="white-space:normal;display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 12px;border:0;border-bottom:1px solid rgba(75,46,38,.1);border-left:2px solid {{ l.accent }};background:{{ l.bg }};text-align:left;cursor:pointer;transition:background-color .3s ease,border-color .3s ease">
-              <sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}"><img data-src="{{ l.imgSrc }}" alt="" style="width:96px;height:78px;object-fit:cover;border-radius:6px;display:block"></sc-if>
-              <span style="display:grid;gap:3px">
-                <span style="font:400 20px/1.1 'Newsreader',serif;color:#3A2B24">{{ l.name }}</span>
-                <span style="font:400 13px/1.4 Figtree;color:#7A6259">{{ l.subShort }}</span>
-                <span style="font:400 13px/1.4 Figtree;color:#4B2E26">{{ l.address }}</span>
-                <span style="font:400 12px/1.4 Figtree;color:#7A6259">{{ l.hoursTiny }}</span>
-              </span>
-              <span data-arrow aria-hidden="true" style="font:400 18px/1 Figtree;color:{{ l.arrow }};transition:transform .3s cubic-bezier(.22,1,.36,1),color .3s ease">→</span>
-            </button>
-          </sc-for></sc-if>
-        </div>
-        <!-- selected location panel (keyed remount = crossfade) -->
-        <div data-reveal="fade" style="position:sticky;top:96px;overflow:hidden">
-          {{ locPanel }}
-        </div>
-      </div>
-</sc-if>    </main></sc-if>
+    <main data-screen-label="Locations"><sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">{{ cafesView }}</sc-if></main>
   </sc-if>
 
   <!-- ============ LOCATION DETAIL ============ -->
   <sc-if value="{{ isLocation }}" hint-placeholder-val="{{ false }}">
-    <main data-screen-label="Location detail"><sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">
-      <section style="position:relative;min-height:min(60vh,560px);display:grid;align-items:end;background:#3A2B24;overflow:hidden">
-        <sc-if value="{{ selHasImg }}" hint-placeholder-val="{{ false }}"><img data-src="{{ selImgSrc }}" alt="{{ sel.name }} café" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></sc-if>
-        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(58,43,36,.1),rgba(58,43,36,.85))"></div>
-        <div style="position:relative;max-width:1400px;width:100%;margin:0 auto;padding:120px clamp(16px,3vw,40px) 40px">
-          <button type="button" onClick="{{ goLocations }}" style="height:34px;padding:0 12px;border-radius:999px;border:1px solid rgba(243,238,229,.4);background:transparent;color:#F3EEE5;font:500 13px/1 Figtree;cursor:pointer">← All locations</button>
-          <p style="margin:22px 0 10px;font:500 12px/1 Figtree;letter-spacing:.16em;text-transform:uppercase;color:#E9C89E">{{ sel.sub }}</p>
-          <h1 style="margin:0;font:300 clamp(44px,7vw,96px)/.95 'Newsreader',serif;letter-spacing:0;color:#F3EEE5">EightyTwenty {{ sel.name }}</h1>
-          <p style="margin:14px 0 0;font:400 17px/1.4 Figtree;color:rgba(243,238,229,.85)">{{ sel.address }}</p>
-        </div>
-      </section>
-      <section style="max-width:1400px;margin:0 auto;padding:32px clamp(16px,3vw,40px) 80px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px;align-items:start">
-        <div style="display:grid;gap:16px">
-          <div style="display:flex;flex-wrap:wrap;gap:10px">
-            <button data-public-order type="button" onClick="{{ orderFromSel }}" style="height:52px;padding:0 24px;border-radius:999px;border:0;background:#B67A4B;color:#3A2B24;font:500 15px/1 Figtree;cursor:pointer">Order Online ·&nbsp;{{ sel.name }}</button>
-            <button type="button" onClick="{{ reserveAtSel }}" style="height:52px;padding:0 24px;border-radius:999px;border:1.5px solid #4B2E26;background:transparent;color:#4B2E26;font:500 15px/1 Figtree;cursor:pointer">Book now</button>
-            <button type="button" onClick="{{ goMenu }}" style="height:52px;padding:0 24px;border-radius:999px;border:1px solid rgba(75,46,38,.2);background:transparent;color:#4B2E26;font:500 15px/1 Figtree;cursor:pointer">View our full menu</button>
-          </div>
-          <div data-reveal-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
-            <div style="padding:18px;border-radius:8px;background:#ECE4D6"><p style="margin:0;font:500 11px/1 Figtree;letter-spacing:.16em;text-transform:uppercase;color:#8B5827">Opening hours</p><p style="margin:10px 0 0;font:500 16px/1.4 Figtree">{{ sel.hours }}</p><p style="margin:6px 0 0;font:400 13px/1 Figtree;color:#7A6259">{{ sel.status }}</p></div>
-            <div style="padding:18px;border-radius:8px;background:#ECE4D6"><p style="margin:0;font:500 11px/1 Figtree;letter-spacing:.16em;text-transform:uppercase;color:#8B5827">Contact</p><p style="margin:10px 0 0;font:500 16px/1.4 Figtree">{{ sel.phoneLabel }}</p><p style="margin:6px 0 0;font:400 13px/1.4 Figtree;color:#7A6259">{{ sel.emailLabel }}</p></div>
-            <div data-public-order style="padding:18px;border-radius:8px;background:#ECE4D6"><p style="margin:0;font:500 11px/1 Figtree;letter-spacing:.16em;text-transform:uppercase;color:#8B5827">Ordering</p><p style="margin:10px 0 0;font:500 16px/1.4 Figtree">{{ sel.methodsLabel }}</p><p style="margin:6px 0 0;font:400 13px/1.4 Figtree;color:#7A6259">Pick up at counter</p></div>
-          </div>
-          <sc-if value="{{ sel.note }}" hint-placeholder-val="{{ false }}"><p style="margin:8px 0 0;font:400 clamp(22px,2.2vw,30px)/1.3 Figtree;letter-spacing:0;font-style:italic;color:#4B2E26;max-width:40ch">“{{ sel.note }}”</p></sc-if>
-          <sc-if value="{{ sel.gf }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font:400 15px/1.55 Figtree;color:#4B2E26;max-width:62ch">The Gluten Free cafe is a part of EightyTwenty Food Group, set up as a safe place for everyone with a gluten allergy. Enjoyable, healthy food is at the core of everything we do.</p></sc-if>
-        </div>
-        <div style="border:1px solid rgba(75,46,38,.12);border-radius:10px;overflow:hidden;background:#F3EEE5">
-          <div style="padding:18px;display:grid;gap:8px">
-            <p style="margin:0;font:500 11px/1 Figtree;letter-spacing:.16em;text-transform:uppercase;color:#8B5827">Find us</p>
-            <p style="margin:8px 0 0;font:300 30px/1.1 'Newsreader',serif">{{ sel.name }}</p>
-            <p style="margin:0 0 8px;font:400 14px/1.4 Figtree;color:#7A6259">{{ sel.sub }}</p>
-            <a href="{{ sel.mapsHref }}" target="_blank" rel="noopener" style="display:grid;place-items:center;height:48px;border-radius:10px;background:#4B2E26;color:#F3EEE5;font:500 14px/1 Figtree">Get directions</a>
-            <p style="margin:0;font:400 13px/1.5 Figtree;color:#7A6259">{{ sel.address }}</p>
-          </div>
-        </div>
-      </section>
-</sc-if>    </main>
+    <main data-screen-label="Location detail"><sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">{{ cafeDetailView }}</sc-if></main>
   </sc-if>
 
   <!-- ============ RESERVE ============ -->
@@ -1439,7 +1420,7 @@ class Component extends DCLogic {
     cart:[], drawer:false, item:null, itemClosing:false, editKey:null, qty:1, sel:{}, note:'', picker:false, navOpen:false, cat:'allday',
     co:{name:'',phone:'',email:'',notes:''}, coErr:{}, pay:'card', placed:null,
     bk:{loc:'phillip',size:'2',date:'',time:'',seat:'Indoor',name:'',phone:'',email:'',notes:''}, bkErr:{}, bkApiErr:'', bkDone:false, bkSending:false, bkRef:'',
-    pkgOpen:false, ctab:0, enquiryDraft:null, enquiryMailto:'', enquirySending:null, enquiryRef:'', enquiryError:'', enquiryErrorKind:'', profileSaved:false, narrow: typeof window !== 'undefined' && window.innerWidth < 900, xwide: typeof window !== 'undefined' && window.innerWidth >= 1180, toast:''
+    pkgOpen:false, ctab:0, rail:{ i:0, prev:-1, tick:0, paused:false, hidden:false }, enquiryDraft:null, enquiryMailto:'', enquirySending:null, enquiryRef:'', enquiryError:'', enquiryErrorKind:'', profileSaved:false, narrow: typeof window !== 'undefined' && window.innerWidth < 900, xwide: typeof window !== 'undefined' && window.innerWidth >= 1180, toast:''
   };
   D = { LOCATIONS:[], MENU:[], CATEGORIES:[], CATERING:[], ORDER_RULES:{ cardSurcharge:.0295, deliveryRate:.1 } };
 
@@ -1447,6 +1428,9 @@ class Component extends DCLogic {
     const p = this.props || {};
     if (p.startView) this.setState({ view:p.startView });
     this._seoDefault = { title: document.title, description: document.querySelector('meta[name="description"]')?.getAttribute('content') || '' };
+    this._reducedMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this._onVisibility = () => this.setState({ rail: Object.assign({}, this.state.rail, { hidden: document.hidden }) });
+    if (typeof document !== 'undefined' && document.addEventListener) document.addEventListener('visibilitychange', this._onVisibility);
     this._onHeroReady = e => { if (e.origin === location.origin && e.data && e.data.type === 'e82-hero-ready') this.postHero(); };
     window.addEventListener('message', this._onHeroReady);
     import(new URL('cms.js?v=cms-hero-20261022', location.href).href).then(C => {
@@ -1478,7 +1462,7 @@ class Component extends DCLogic {
     this._onItemKeyDown = e => { if (e.key === 'Escape' && this.state.item) { e.preventDefault(); this.closeItem(); } };
     window.addEventListener('keydown', this._onItemKeyDown);
   }
-  componentDidUpdate() { this.hydrateImages(); this.observeReveals(); this.syncItemScrollLock(); this.syncCms(); }
+  componentDidUpdate() { this.hydrateImages(); this.observeReveals(); this.syncItemScrollLock(); this.syncCms(); this.syncRail(); }
   // BOS CMS: SEO for every view; legal pages and CMS-only pages take their body from a published page.
   syncCms() { const C = this.C, s = this.state; if (!C || !s.ready) return; const S = this.D.SETTINGS, listed = C.pageList(S);
     if (!this._homeCms && (C.published(S, 'home') || !listed)) { this._homeCms = true; C.fetchPage('home').then(p => { if (!p) return; const home = C.homeContent(p); home.slides.forEach(sl => { if (sl.image) sl.image = new URL(sl.image, location.origin).href; }); this.setState({ homeCms: home }, () => this.postHero()); }); }
@@ -1558,7 +1542,7 @@ class Component extends DCLogic {
   }
 
   hydrateImages() { document.querySelectorAll('img[data-src]').forEach(img => { const v = img.getAttribute('data-src') || ''; if (v && !v.includes('{{') && img.getAttribute('src') !== v) img.setAttribute('src', v); }); }
-  componentWillUnmount() { clearInterval(this._bkT); clearTimeout(this._itemCloseT); if (this._revealScroll) { window.removeEventListener('scroll', this._revealScroll); window.removeEventListener('resize', this._revealScroll); } window.removeEventListener('resize', this._onResize); window.removeEventListener('keydown', this._onItemKeyDown); window.removeEventListener('message', this._onHeroReady); this.unlockItemScroll(); clearTimeout(this._toastT); }
+  componentWillUnmount() { clearInterval(this._bkT); clearTimeout(this._itemCloseT); clearTimeout(this._railT); clearTimeout(this._railResumeT); if (typeof document !== 'undefined' && document.removeEventListener) document.removeEventListener('visibilitychange', this._onVisibility); if (this._revealScroll) { window.removeEventListener('scroll', this._revealScroll); window.removeEventListener('resize', this._revealScroll); } window.removeEventListener('resize', this._onResize); window.removeEventListener('keydown', this._onItemKeyDown); window.removeEventListener('message', this._onHeroReady); this.unlockItemScroll(); clearTimeout(this._toastT); }
 
   $(n) { return '$' + n.toFixed(2); }
   rememberLocation(id) { this._chosenLocation = id; if (this.D.rememberLocation) this.D.rememberLocation(id); }
@@ -1703,6 +1687,96 @@ class Component extends DCLogic {
   submitEnquiry(kind) { return e => { e.preventDefault(); const controls = [...e.currentTarget.querySelectorAll('input,select,textarea')]; const required = kind === 'catering' ? [0,1,2,3,9] : [0,1,2,3]; required.forEach(i => { if (controls[i]) controls[i].required = true; }); if (!e.currentTarget.reportValidity()) return; if (this.state.enquirySending) return; const pairs = controls.map(el => { const label = el.closest('label'); const name = label?.querySelector('span')?.textContent.trim() || el.getAttribute('aria-label') || el.placeholder || el.name; return [name, el.value.trim()]; }).filter(p => p[0] && p[1]); const fields = pairs.map(p => p[0] + ': ' + p[1]); if (kind === 'catering') fields.push('Date: ' + (this.state.ct?.date || 'Not specified'), 'Package: ' + (this.D.CATERING[this.state.ctab]?.id || 'Not specified')); const url = this.emailDraft('info@eightytwentyfood.com.au', 'EightyTwenty ' + kind + ' enquiry', fields); const get = re => (pairs.find(p => re.test(p[0])) || [])[1] || ''; const slug = v => String(v).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); const pkgId = get(/^catering menu/i) || this.D.CATERING[this.state.ctab]?.id || ''; const payload = {}; if (kind === 'catering') { if (get(/^occasion/i)) payload.occasion = get(/^occasion/i); if (get(/^location/i)) payload.eventLocation = get(/^location/i); } const body = kind === 'catering' ? { kind, name:(get(/^first name/i) + ' ' + get(/^last name/i)).trim(), email:get(/^email/i), phone:get(/^phone/i), company:get(/^company/i), event_date:this.state.ct?.date || null, headcount:parseInt(get(/^how many/i), 10) || null, package:pkgId ? slug(pkgId) : null, message:fields.join('\n'), payload } : { kind, name:get(/^business name/i) || 'Wholesale enquiry', company:get(/^business name/i), email:get(/^email/i), phone:get(/^phone/i), message:fields.join('\n') }; this.setState({ enquirySending:kind, enquiryError:'', enquiryErrorKind:'' }); const send = this.D.postForm ? this.D.postForm('/api/v1/public/enquiries', body) : Promise.resolve({ ok:false }); send.then(res => { const ref = (res.ok && res.data && res.data.reference) || ''; const err = !ref && res.data && res.data.error; if (err) { const fieldsErr = err.fields && Object.keys(err.fields).length ? ' ' + Object.entries(err.fields).map(([k, v]) => k.replace(/_/g, ' ') + ': ' + v).join(' ') : ''; this.setState({ enquirySending:null, enquiryError:(err.message || 'We could not send your enquiry.') + fieldsErr, enquiryErrorKind:kind }); return; } this.setState({ enquirySending:null, enquiryDraft:kind, enquiryRef:ref, enquiryMailto:url }); if (!ref) window.location.href = url; }); }; }
   bkSubmit() { const { bk } = this.state; const err = {}; if (!bk.size) err.size = 1; if (!bk.date) err.date = 1; if (!bk.time) err.time = 1; if (!bk.name.trim()) err.name = 1; if ((bk.phone.match(/\d/g) || []).length < 8) err.phone = 1; if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(bk.email)) err.email = 1; if (Object.keys(err).length) { this.setState({ bkErr:err, bkApiErr:'' }); return; } if (this.state.bkSending) return; this.setState({ bkSending:true, bkErr:{}, bkApiErr:'' }); const body = { location:bk.loc, date:bk.date, time:bk.time, party_size:parseInt(bk.size, 10) || 1, name:bk.name.trim(), email:bk.email.trim(), phone:bk.phone.trim(), seating:String(bk.seat || '').toLowerCase(), notes:bk.notes.trim() }; const guest = () => this.D.postForm ? this.D.postForm('/api/v1/public/bookings', body) : Promise.resolve({ ok:false }); const signed = !!this.state.signedIn; const send = signed && this._account ? this._account.then(A => A ? A.bookAsCustomer(body) : guest()) : guest(); send.then(res => { const ref = (res.ok && res.data && res.data.reference) || ''; const message = !ref && res.data && res.data.error && res.data.error.message; if (message) { this.setState({ bkSending:false, bkApiErr:message }); return; } this.setState({ bkSending:false, bkDone:true, bkRef:ref }); window.scrollTo(0, 0); if (ref && signed) this.loadMyBookings(); if (!ref) window.location.href = this.bookingDraft(); }); }
 
+  // ---- Our cafés: port of the app's Locations screens (CafesScreen, CafeDetailScreen, CafeRail) ----
+  cafeArea(l) { const AREA = { braddon:'Lonsdale St', civic:'City', coombs:'Molonglo', greenway:'Tuggeranong', gungahlin:'North', dickson:'Inner North', belconnen:'North', phillip:'Woden', kingston:'Inner South' }; return l.area || AREA[l.id] || l.sub || ''; }
+  hoursWindow(l, d) {
+    if (!l || l.tbc || !l.hours || /to be confirmed/i.test(l.hours)) return { kind:'tbc' };
+    const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], dow = d.getDay();
+    const inRange = part => { const r = part.match(/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s*[–—-]\s*(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/); if (!r) return !/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/.test(part); const a = DAYS.indexOf(r[1]), b = DAYS.indexOf(r[2]); return a <= b ? dow >= a && dow <= b : dow >= a || dow <= b; };
+    const to24 = (hh, mm, ap) => (parseInt(hh, 10) % 12) + (/pm/i.test(ap) ? 12 : 0) + parseInt(mm, 10) / 60;
+    for (const part of String(l.hours).split('·').map(p => p.trim()).filter(Boolean)) {
+      if (!inRange(part)) continue;
+      if (/closed/i.test(part)) return { kind:'closed' };
+      const t = part.match(/(\d{1,2}):(\d{2})\s*(am|pm)\s*[–—-]\s*(\d{1,2}):(\d{2})\s*(am|pm)/i);
+      if (t) return { kind:'open', open: to24(t[1], t[2], t[3]), close: to24(t[4], t[5], t[6]) };
+    }
+    return { kind:'closed' };
+  }
+  fmtHour(h) { const hh = Math.floor(h), mm = Math.round((h - hh) * 60), h12 = ((hh + 11) % 12) + 1; return h12 + (mm ? ':' + String(mm).padStart(2, '0') : '') + (hh < 12 ? 'am' : 'pm'); }
+  cafeStatus(l, now) {
+    const d = now || new Date(), w = this.hoursWindow(l, d);
+    if (w.kind === 'tbc') return { tone:'soon', label:'Opening soon', color:'#74655A' };
+    const h = d.getHours() + d.getMinutes() / 60;
+    if (w.kind === 'open' && h >= w.open && h < w.close) return { tone:'open', label:'Open until ' + this.fmtHour(w.close), color:'#3E6B47' };
+    for (let i = 0; i < 8; i++) { const n = new Date(d); n.setDate(n.getDate() + i); const x = this.hoursWindow(l, n); if (x.kind === 'open' && (i > 0 || h < x.open)) return { tone:'closed', label:'Closed · opens ' + this.fmtHour(x.open), color:'#9A4436' }; }
+    return { tone:'closed', label:'Closed', color:'#9A4436' };
+  }
+  railItems() { return ((this.D && this.D.LOCATIONS) || []).filter(l => !l.tbc); }
+  railGo(i) { const n = this.railItems().length; if (!n) return; const r = this.state.rail, next = ((i % n) + n) % n; if (next === r.i) return; this.setState({ rail: Object.assign({}, r, { prev: r.i, i: next, tick: r.tick + 1 }) }); }
+  railRunning() { const s = this.state, r = s.rail; return s.view === 'locations' && s.ready && this.railItems().length > 1 && !r.paused && !r.hidden && !this._reducedMotion; }
+  syncRail() {
+    const key = this.railRunning() + ':' + this.state.rail.i + ':' + this.state.rail.tick;
+    if (key === this._railKey) return; this._railKey = key; clearTimeout(this._railT);
+    if (this.railRunning()) this._railT = setTimeout(() => this.railGo(this.state.rail.i + 1), 4600);
+  }
+  railPause() { clearTimeout(this._railResumeT); if (!this.state.rail.paused) this.setState({ rail: Object.assign({}, this.state.rail, { paused:true }) }); }
+  railResume() { clearTimeout(this._railResumeT); this._railResumeT = setTimeout(() => this.setState({ rail: Object.assign({}, this.state.rail, { paused:false }) }), 3800); }
+  cafeRail(items) {
+    const E = React.createElement, r = this.state.rail, n = items.length; if (!n) return null;
+    const pos = i => String(i + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0');
+    const slide = (l, i, active) => { const st = this.cafeStatus(l); return E('div', { key: l.id + '-' + (active ? r.tick : 'leaving-' + r.tick), className: 'e82-slide' + (active ? ' is-active' : ' is-leaving') + (r.tick === 0 ? ' is-first' : ''), style: { zIndex: active ? 2 : 1 }, 'aria-hidden': !active },
+      E('div', { className:'e82-slide-inner' },
+        E('button', { type:'button', className:'e82-rail-card', onClick: this.go('location', { locationId:l.id }), 'aria-label': l.name + ', ' + st.label, tabIndex: active ? 0 : -1 },
+          E('div', { className:'e82-rail-photo' }, l.img ? E('img', { className:'e82-rail-img', src:l.img, alt:'', draggable:false }) : null, E('span', { className:'e82-rail-pos' }, pos(i))),
+          E('div', { className:'e82-rail-cap' }, E('span', { className:'e82-rail-name' }, l.name), E('span', { className:'e82-status', style:{ color: st.color } }, E('i', { style:{ background: st.color } }), st.label))))); };
+    const slides = [slide(items[r.i], r.i, true)]; if (r.prev >= 0 && r.prev !== r.i && items[r.prev]) slides.unshift(slide(items[r.prev], r.prev, false));
+    return E('div', { className:'e82-rail', role:'region', 'aria-roledescription':'carousel', 'aria-label':'Our cafés', 'aria-live':'off', tabIndex:0,
+      onPointerDown: e => { this._railX = e.clientX; this.railPause(); }, onPointerUp: e => { const dx = e.clientX - (this._railX == null ? e.clientX : this._railX); this._railX = null; if (Math.abs(dx) > 28) this.railGo(r.i + (dx < 0 ? 1 : -1)); this.railResume(); }, onPointerCancel: () => this.railResume(), onMouseEnter: () => this.railPause(), onMouseLeave: () => { this._railX = null; this.railResume(); },
+      onKeyDown: e => { if (e.key === 'ArrowRight') { e.preventDefault(); this.railGo(r.i + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); this.railGo(r.i - 1); } } }, slides,
+      E('div', { className:'e82-rail-dots', 'aria-hidden':'true' }, items.map((l, i) => E('i', { key:l.id, className: i === r.i ? 'is-on' : '' }))));
+  }
+  cafesView() {
+    const E = React.createElement, s = this.state; if (!s.ready) return null;
+    const all = this.railItems(), featured = all.find(l => l.id === 'phillip') || all[0], others = all.filter(l => l !== featured), now = new Date();
+    const fs = featured ? this.cafeStatus(featured, now) : null;
+    const cell = l => { const st = this.cafeStatus(l, now); return E('button', { key:l.id, type:'button', className:'e82-cell', onClick: this.go('location', { locationId:l.id }), 'aria-label': l.name + ', ' + this.cafeArea(l) + ', ' + st.label },
+      E('div', { className:'e82-square' }, l.img ? E('img', { src:l.img, alt:'', loading:'lazy' }) : null),
+      E('span', { className:'e82-cell-name' }, l.name), E('span', { className:'e82-cell-area' }, this.cafeArea(l)), E('span', { className:'e82-cell-status', style:{ color: st.color } }, st.label)); };
+    return E('div', { className:'e82-cafes' },
+      E('div', { className:'e82-screen-head' }, E('h1', null, 'Our cafés')),
+      this.cafeRail(all),
+      featured ? E('div', { className:'e82-featured' },
+        E('button', { type:'button', className:'e82-featured-photo', onClick: this.go('location', { locationId:featured.id }), 'aria-label': featured.name + ', ' + fs.label }, featured.img ? E('img', { src:featured.img, alt:'EightyTwenty ' + featured.name }) : null),
+        E('div', { className:'e82-featured-body' },
+          E('div', { className:'e82-title-row' }, E('h2', null, featured.name), E('span', { className:'e82-status', style:{ color: fs.color } }, fs.label)),
+          E('p', { className:'e82-eyebrow' }, featured.sub), E('p', { className:'e82-meta' }, featured.address + ' · ' + (featured.hoursShort || '')),
+          E('div', { className:'e82-actions' },
+            E('button', { type:'button', className:'e82-btn is-primary', 'data-public-order':'', onClick: this.go('menu', { locationId:featured.id, locId:featured.id }) }, 'Order here'),
+            E('button', { type:'button', className:'e82-btn is-primary', onClick: this.go('reserve', { bk: Object.assign({}, s.bk, { loc:featured.id }) }) }, 'Book a table'),
+            E('a', { className:'e82-btn is-outline', href: this.mapsHref(featured), target:'_blank', rel:'noopener' }, 'Directions')))) : null,
+      E('h2', { className:'e82-across' }, 'Across Canberra'),
+      E('div', { className:'e82-grid' }, others.map(cell)));
+  }
+  cafeDetailView() {
+    const E = React.createElement, s = this.state; if (!s.ready) return null;
+    const l = this.decorate(this.locById(s.locationId)), st = this.cafeStatus(l), soon = st.tone === 'soon';
+    const rows = [['Hours', l.hours || '—'], ['Phone', l.phone || '—', l.phone ? 'tel:' + String(l.phone).replace(/\s+/g, '') : null], ['Services', (l.methods || []).join(' · ')], ['Directions', 'Open in Maps', this.mapsHref(l), true]];
+    return E('div', { className:'e82-detail', key:l.id },
+      E('div', { className:'e82-hero' }, l.img ? E('img', { src:l.img, alt:'EightyTwenty ' + l.name }) : null,
+        E('button', { type:'button', className:'e82-back', onClick: this.go('locations'), 'aria-label':'Back to our cafés' }, '←')),
+      E('div', { className:'e82-detail-body' },
+        E('p', { className:'e82-eyebrow' }, l.sub),
+        E('div', { className:'e82-title-row' }, E('h1', null, l.name), E('span', { className:'e82-status', style:{ color: st.color } }, st.label)),
+        E('p', { className:'e82-address' }, l.address),
+        soon ? E('div', { className:'e82-soon' }, 'Opening soon — ordering and bookings open when hours are confirmed.')
+          : E('div', { className:'e82-actions' },
+            E('button', { type:'button', className:'e82-btn is-primary', 'data-public-order':'', onClick: this.go('menu', { locationId:l.id, locId:l.id }) }, 'Order here'),
+            E('button', { type:'button', className:'e82-btn is-primary', onClick: this.go('reserve', { bk: Object.assign({}, s.bk, { loc:l.id }) }) }, 'Book a table'),
+            E('button', { type:'button', className:'e82-btn is-outline', onClick: this.go('menu') }, 'View our full menu')),
+        E('div', { className:'e82-info' }, rows.map(([label, value, href, accent]) => E(href ? 'a' : 'div', Object.assign({ key:label, className:'e82-info-row' + (accent ? ' is-accent' : '') }, href ? { href, target: href.startsWith('tel:') ? undefined : '_blank', rel:'noopener' } : {}), E('span', { className:'e82-info-label' }, label), E('span', { className:'e82-info-value' }, value)))),
+        l.note ? E('p', { className:'e82-note' }, '“' + l.note + '”') : null,
+        l.gf ? E('p', { className:'e82-gf' }, 'The Gluten Free cafe is a part of EightyTwenty Food Group, set up as a safe place for everyone with a gluten allergy. Enjoyable, healthy food is at the core of everything we do.') : null));
+  }
   renderVals() {
     const s = this.state, D = this.D;
     const narrow = s.narrow || !!(this.props && this.props.forceMobile), wide = !narrow;
@@ -1855,7 +1929,7 @@ class Component extends DCLogic {
       pkgMaxH: s.pkgOpen ? '600px' : '0px',
       pkgOpacity: s.pkgOpen ? 1 : 0,
       togglePkg: () => this.setState(st => ({ pkgOpen: !st.pkgOpen })),
-      bkCarousel: this.bkCarousel(), pkgImage: this.pkgImage(), locPanel: this.locPanel(otherLocationId), pkgIndex: String(s.ctab + 1).padStart(2, '0'), pkgItems: (pkg.items || []).map((t, i) => ({ n: String(i + 1).padStart(2, '0'), text: t })), bkCalOpen: s.calOpen === 'bk', ctCalOpen: s.calOpen === 'ct', tmOpen: s.calOpen === 'tm', tmToggle: () => this.setState({ calOpen: s.calOpen === 'tm' ? null : 'tm' }), tmGroups: tm.groups, tmHoursLabel: tm.hoursLabel, tmFieldLabel: tm.fieldLabel, tmFieldColor: s.bk.time ? '#3A2B24' : '#7A6259', bkCalToggle: () => this.setState({ calOpen: s.calOpen === 'bk' ? null : 'bk' }), ctCalToggle: () => this.setState({ calOpen: s.calOpen === 'ct' ? null : 'ct' }), bkCalDays: cal.cells, ctCalDays: calCt.cells, bkCalFieldLabel: fmtDate(s.bk.date), bkCalFieldColor: s.bk.date ? '#3A2B24' : '#7A6259', ctCalFieldLabel: fmtDate((s.ct || {}).date), ctCalFieldColor: (s.ct || {}).date ? '#3A2B24' : '#7A6259', calScrim: narrow ? 'rgba(58,43,36,.35)' : 'transparent', calPos: narrow ? 'fixed' : 'absolute', calTop: narrow ? 'auto' : 'calc(100% + 6px)', calRight: narrow ? '0' : '0', calLeft: narrow ? '0' : 'auto', calBottom: narrow ? '0' : 'auto', calWidth: narrow ? '100%' : 'min(300px,calc(100vw - 32px))', calPad: narrow ? '18px 18px calc(22px + env(safe-area-inset-bottom))' : '14px', calRadius: narrow ? '18px 18px 0 0' : '12px', calAnim: narrow ? 'sheetUp' : 'rise', calCell: narrow ? '44px' : '36px', calPrev: calShift(-1), calNext: calShift(1), calTitle: cal.title, calDow: ['M','T','W','T','F','S','S'],
+      cafesView: this.cafesView(), cafeDetailView: this.cafeDetailView(), bkCarousel: this.bkCarousel(), pkgImage: this.pkgImage(), locPanel: this.locPanel(otherLocationId), pkgIndex: String(s.ctab + 1).padStart(2, '0'), pkgItems: (pkg.items || []).map((t, i) => ({ n: String(i + 1).padStart(2, '0'), text: t })), bkCalOpen: s.calOpen === 'bk', ctCalOpen: s.calOpen === 'ct', tmOpen: s.calOpen === 'tm', tmToggle: () => this.setState({ calOpen: s.calOpen === 'tm' ? null : 'tm' }), tmGroups: tm.groups, tmHoursLabel: tm.hoursLabel, tmFieldLabel: tm.fieldLabel, tmFieldColor: s.bk.time ? '#3A2B24' : '#7A6259', bkCalToggle: () => this.setState({ calOpen: s.calOpen === 'bk' ? null : 'bk' }), ctCalToggle: () => this.setState({ calOpen: s.calOpen === 'ct' ? null : 'ct' }), bkCalDays: cal.cells, ctCalDays: calCt.cells, bkCalFieldLabel: fmtDate(s.bk.date), bkCalFieldColor: s.bk.date ? '#3A2B24' : '#7A6259', ctCalFieldLabel: fmtDate((s.ct || {}).date), ctCalFieldColor: (s.ct || {}).date ? '#3A2B24' : '#7A6259', calScrim: narrow ? 'rgba(58,43,36,.35)' : 'transparent', calPos: narrow ? 'fixed' : 'absolute', calTop: narrow ? 'auto' : 'calc(100% + 6px)', calRight: narrow ? '0' : '0', calLeft: narrow ? '0' : 'auto', calBottom: narrow ? '0' : 'auto', calWidth: narrow ? '100%' : 'min(300px,calc(100vw - 32px))', calPad: narrow ? '18px 18px calc(22px + env(safe-area-inset-bottom))' : '14px', calRadius: narrow ? '18px 18px 0 0' : '12px', calAnim: narrow ? 'sheetUp' : 'rise', calCell: narrow ? '44px' : '36px', calPrev: calShift(-1), calNext: calShift(1), calTitle: cal.title, calDow: ['M','T','W','T','F','S','S'],
       bkSubmit: () => this.bkSubmit(), bkMailto: this.bookingDraft(), bkDone: s.bkDone, bkSent: !!s.bkRef, bkDraft: !s.bkRef, bkRef: s.bkRef, bkBtnLabel: s.bkSending ? 'Sending…' : (bkLive ? 'Request a table' : 'Prepare booking email'), bkHelpText: bkLive ? 'The café replies by email to confirm your table.' : 'Send the email draft to request a table.', bkDoneNot: !s.bkDone, bkWhen, bkReset: () => this.setState({ bkDone:false, bkRef:'', bk: Object.assign({}, s.bk, { size:'2', date:'', time:'', notes:'' }) }),
       pkg, heroCateringTabs, pickPkgSelect: e => this.setState({ ctab: Math.max(0, D.CATERING.findIndex(c => c.id === e.target.value)) }), submitCateringEnquiry: this.submitEnquiry('catering'), submitWholesaleEnquiry: this.submitEnquiry('wholesale'), cateringDraft: s.enquiryDraft === 'catering' && !s.enquiryRef, wholesaleDraft: s.enquiryDraft === 'wholesale' && !s.enquiryRef, cateringSent: s.enquiryDraft === 'catering' && !!s.enquiryRef, wholesaleSent: s.enquiryDraft === 'wholesale' && !!s.enquiryRef, cateringError: !!s.enquiryError && s.enquiryErrorKind === 'catering', wholesaleError: !!s.enquiryError && s.enquiryErrorKind === 'wholesale', enquiryError: s.enquiryError, enquiryRef: s.enquiryRef, cateringBtnLabel: s.enquirySending === 'catering' ? 'Sending…' : 'Submit enquiry', wholesaleBtnLabel: s.enquirySending === 'wholesale' ? 'Sending…' : 'Send wholesale enquiry', enquiryMailto:s.enquiryMailto,
       wholesale,

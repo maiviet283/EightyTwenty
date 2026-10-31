@@ -14,7 +14,7 @@ import { WalletPassSheet } from '@/features/loyalty/components/WalletPassSheet';
 import { ItemSheet } from '@/features/menu/components/ItemSheet';
 import { AvatarSheet } from '@/features/profile/components/AvatarSheet';
 import { usePreferences } from '@/features/profile/hooks';
-import { useCartCount, useCartStore } from '@/store/cart';
+import { DEFAULT_LOCATION_ID, useCartCount, useCartStore } from '@/store/cart';
 import { useUiStore, type TabKey } from '@/store/ui';
 import { activeTab, metaFor, TAB_ROUTES } from './routeMeta';
 import { TabNavigationContext } from './tabNavigation';
@@ -85,8 +85,14 @@ function useSyncHomeCafe() {
   const synced = useRef(false);
   useEffect(() => {
     if (synced.current || !prefs || !locations) return;
+    const cart = useCartStore.getState();
     const home = locations.find((l) => l.id === prefs.homeCafeId);
-    if (home) useCartStore.getState().setLocation(home.id, home.methods);
+    if (home) cart.setLocation(home.id, home.methods);
+    else if (!locations.some((l) => l.id === cart.context.locationId)) {
+      // A café that is no longer public (cached pick or saved home café): fall back to the default.
+      const fallback = locations.find((l) => l.id === DEFAULT_LOCATION_ID) ?? locations[0];
+      if (fallback) cart.setLocation(fallback.id, fallback.methods);
+    }
     synced.current = true;
   }, [prefs, locations]);
 }

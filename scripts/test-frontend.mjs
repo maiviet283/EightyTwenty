@@ -59,7 +59,7 @@ test('the complete embedded customer app remains valid JavaScript', () => {
 });
 test('remove only the landing introduction; retain featured location and site animations', () => {
   assert.ok(!html.includes('home-phillip-title'));
-  assert.ok(html.includes('featuredPhillip.address'));
+  assert.ok(html.includes('{{ cafesView }}') && html.includes('{{ cafeDetailView }}'));
   for (const feature of ['data-cafe-track', 'data-reveal', 'bkSubmit', 'submitEnquiry', 'placeOrder']) {
     assert.ok(html.includes(feature), feature);
   }
@@ -631,4 +631,42 @@ test('every menu card, featured item and detail uses price-free copy without mut
   }
   assert.equal(count, 84);
   assert.equal(JSON.stringify(bundled.MENU), before);
+});
+
+test('café status and the wipe-reveal rail follow the app rules', () => {
+  const { app, context } = mountWithCms({}, null);
+  context.setTimeout = () => 0;
+  context.clearTimeout = () => {};
+  context.setInterval = () => 0;
+  context.clearInterval = () => {};
+  app.D = { ...bundled, LOCATIONS: publicLocations(bundled.LOCATIONS), SHOW_MENU_PRICES: false, menuText,
+    ORDER_RULES: { cardSurcharge: .0295, deliveryRate: .1 } };
+  const daily = { id: 'x', hours: 'Mon–Sun 6:00am – 3:00pm' };
+  const weekdays = { id: 'civic', hours: 'Mon–Fri 7:00am – 3:00pm · Sat–Sun closed' };
+  const tuesday10 = new Date(2026, 10, 3, 10, 0); // Tue 3 Nov 2026
+  const tuesday16 = new Date(2026, 10, 3, 16, 0);
+  const saturday = new Date(2026, 10, 7, 10, 0);
+  assert.equal(JSON.stringify(app.cafeStatus(daily, tuesday10)), JSON.stringify({ tone: 'open', label: 'Open until 3pm', color: '#3E6B47' }));
+  assert.equal(app.cafeStatus(daily, tuesday16).label, 'Closed · opens 6am');
+  assert.equal(app.cafeStatus(weekdays, saturday).label, 'Closed · opens 7am');
+  assert.equal(app.cafeStatus({ id: 'akuna', tbc: true, hours: 'Hours to be confirmed' }).label, 'Opening soon');
+  // The rail only cycles public, open cafés and wraps at both ends.
+  const n = app.railItems().length;
+  assert.equal(n, bundled.LOCATIONS.filter(l => l.id !== 'akuna' && !l.tbc).length);
+  app.state.view = 'locations';
+  app.state.ready = true;
+  app.railGo(n - 1);
+  assert.equal(app.state.rail.i, n - 1);
+  app.railGo(n);
+  assert.equal([app.state.rail.i, app.state.rail.prev, app.state.rail.tick].join(','), [0, n - 1, 2].join(','));
+  app.railGo(-1);
+  assert.equal(app.state.rail.i, n - 1);
+  app.railPause();
+  assert.equal(app.railRunning(), false);
+  app.state.rail.paused = false;
+  assert.equal(app.railRunning(), true);
+  app.state.view = 'home';
+  assert.equal(app.railRunning(), false);
+  const vals = (app.state.view = 'locations', app.renderVals());
+  assert.ok(vals.cafesView && vals.cafeDetailView !== undefined);
 });

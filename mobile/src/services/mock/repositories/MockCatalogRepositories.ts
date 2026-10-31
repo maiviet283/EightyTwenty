@@ -1,4 +1,5 @@
 import { validateCateringEnquiry } from '@/domain/catering';
+import { isHiddenLocation, publicLocations } from '@/domain/locations';
 import type { CateringRepository, ContentRepository, LocationRepository, MenuRepository } from '@/repositories/contracts';
 import { AppError } from '@/services/errors';
 import type { CateringEnquiry, CateringEnquiryRequest, CateringPackage, Faq, ID, Location, MenuCategory, MenuItem, Offer } from '@/types';
@@ -11,12 +12,12 @@ import { clone, MockRepository, nowIso } from './shared';
 export class MockLocationRepository extends MockRepository implements LocationRepository {
   async getLocations(): Promise<Location[]> {
     await latency();
-    return LOCATIONS;
+    return publicLocations(LOCATIONS);
   }
 
   async getLocation(id: ID): Promise<Location> {
     await latency();
-    const loc = findLocation(id);
+    const loc = isHiddenLocation(id) ? undefined : findLocation(id);
     if (!loc) throw new AppError('NOT_FOUND', 'That café could not be found.', { status: 404 });
     return loc;
   }

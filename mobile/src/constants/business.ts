@@ -38,5 +38,11 @@ export const CONTACT = {
 
 export const GIFT_CARD_AMOUNTS = [25, 50, 75, 100] as const;
 
+/**
+ * Cafés kept out of every customer-facing list, matching the website (`publicLocations`).
+ * Akuna St is listed in BOS with its history intact but is not open to the public yet.
+ */
+export const HIDDEN_LOCATION_IDS: readonly string[] = ['akuna'];
+
 /** Simulated live-order stage interval in the prototype (ms). Used by the mock order service. */
 export const MOCK_ORDER_STAGE_INTERVAL_MS = 4200;

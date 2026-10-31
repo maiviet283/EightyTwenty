@@ -23,7 +23,7 @@ import { formatMoney } from '@/utils/format';
 import { isEmail } from '@/utils/validation';
 import { useGiftCard, useGiftCardActivity, useSendGiftCard } from '../hooks';
 
-const WORDMARK = require('../../../../assets/branding/wordmark-white.webp');
+const LOGO = require('../../../../assets/branding/logo-stacked-white.webp');
 
 function amountLabel(a: GiftCardActivity): string {
   if (a.kind === 'added') return '+' + formatMoney(a.amount);
@@ -68,7 +68,7 @@ export function GiftCardsScreen() {
         <View style={styles.card} accessible accessibilityLabel={`Gift card balance ${formatMoney(card?.balance ?? 0)}, card ending ${card?.last4 ?? ''}`}>
           <View style={styles.ring} />
           <View style={styles.cardTop}>
-            <Image source={WORDMARK} style={styles.wordmark} contentFit="contain" />
+            <Image source={LOGO} style={styles.logo} contentFit="contain" accessibilityLabel="eighty twenty" />
             <Text style={[eyebrow(10, 0.14), { color: colors.sand }]}>Gift card</Text>
           </View>
           <Text style={[eyebrow(10, 0.12), styles.balanceLabel]}>Balance</Text>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   card: { marginTop: 8, marginHorizontal: 20, padding: 20, borderRadius: 18, overflow: 'hidden', backgroundColor: colors.espresso, ...shadows.giftCard },
   ring: { position: 'absolute', right: -60, top: -60, width: 200, height: 200, borderRadius: 100, borderWidth: 1, borderColor: 'rgba(233,200,158,0.14)' },
   cardTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  wordmark: { height: 11, width: 72 },
+  logo: { height: 30, width: 42 },
   balanceLabel: { marginTop: 28, color: creamA(0.7) },
   balance: { marginTop: 8, color: colors.creamText },
   cardMeta: { marginTop: 14, color: creamA(0.75) },
