@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 JOB_INTERVAL = timedelta(minutes=15)
 CHECK_EVERY_SECONDS = 60
 CLOCK = "maintenance"
-_last_check = 0.0
+_last_check = None  # time.monotonic() can be under a minute on a freshly booted machine
 
 
 def retry_emails():
@@ -102,7 +102,7 @@ def kick():
     if not settings.JOBS_IN_PROCESS:
         return
     now = time.monotonic()
-    if now - _last_check < CHECK_EVERY_SECONDS:
+    if _last_check is not None and now - _last_check < CHECK_EVERY_SECONDS:
         return
     _last_check = now
     try:

@@ -34,7 +34,7 @@ def test_one_failing_job_does_not_stop_the_others():
 
 def test_requests_start_the_jobs_when_due(settings, monkeypatch):
     settings.JOBS_IN_PROCESS = True
-    monkeypatch.setattr(jobs, "_last_check", 0.0)
+    monkeypatch.setattr(jobs, "_last_check", None)
     started = []
 
     class Thread:
@@ -47,13 +47,22 @@ def test_requests_start_the_jobs_when_due(settings, monkeypatch):
     with patch.object(jobs.threading, "Thread", Thread):
         APIClient().get("/health")
         APIClient().get("/health")  # within a minute: not even checked
-        monkeypatch.setattr(jobs, "_last_check", 0.0)
+        monkeypatch.setattr(jobs, "_last_check", None)
         APIClient().get("/health")  # checked again, but the 15 minutes are not up
     assert started == [jobs._run_in_thread]
 
 
+def test_first_request_checks_even_right_after_boot(settings, monkeypatch):
+    settings.JOBS_IN_PROCESS = True
+    monkeypatch.setattr(jobs, "_last_check", None)
+    monkeypatch.setattr(jobs.time, "monotonic", lambda: 5.0)  # machine up for 5 seconds
+    with patch.object(jobs, "claim", return_value=False) as claim:
+        APIClient().get("/health")
+    claim.assert_called_once()
+
+
 def test_off_by_default_in_tests_and_dev(settings, monkeypatch):
-    monkeypatch.setattr(jobs, "_last_check", 0.0)
+    monkeypatch.setattr(jobs, "_last_check", None)
     with patch.object(jobs, "claim") as claim:
         APIClient().get("/health")
     claim.assert_not_called()
