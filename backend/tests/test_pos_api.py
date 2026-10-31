@@ -3470,3 +3470,41 @@ def test_managed_order_preserves_multiple_rewards_through_full_refund(
         card.refresh_from_db()
         assert card.stamps == 20
     assert order.adjustments.count() == 1
+
+
+@pytest.mark.parametrize("managed", [False, True])
+def test_order_received_by_verified_pin_staff(till, cafe, menu, cashier, staff_session, managed):
+    response = post(till, "/orders", order_body(staff="Spoofed name", serverLoyalty=managed))
+    assert response.status_code == 201, response.data
+    order = Order.objects.get(number=response.data["id"])
+    assert order.handled_by_id == staff_session.pk
+    assert order.staff_name == "Finn Test"
+    assert (
+        order.created_by_id == cashier.pk
+    )  # Keep the device's authenticated account for traceability.
+    assert order.handled_at is not None
+
+
+def test_order_rejects_invalid_pin_session_even_without_loyalty(till, cafe, menu):
+    till.credentials(HTTP_X_TERMINAL_ID=TERMINAL, HTTP_X_POS_STAFF="invalid-staff-session")
+    response = post(till, "/orders", order_body())
+    assert response.status_code == 403, response.data
+    assert not Order.objects.exists()
+
+
+@pytest.mark.parametrize(
+    "path, body",
+    [
+        ("accept", {}),
+        ("status", {"status": "preparing", "note": "Preparing"}),
+    ],
+)
+def test_order_progress_keeps_verified_pin_actor(
+    till, cafe, menu, cashier, staff_session, path, body
+):
+    created = create(till)
+    response = post(till, f"/orders/{created['id']}/{path}", body)
+    assert response.status_code == 200, response.data
+    order = Order.objects.get(number=created["id"])
+    assert order.handled_by_id == staff_session.pk
+    assert order.handled_by_id != cashier.pk

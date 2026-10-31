@@ -298,8 +298,9 @@ def create_order(request, data):
     location = location_for(user, data["cafe"])
 
     managed_loyalty = data.get("serverLoyalty", False)
-    if managed_loyalty:
-        require_staff_permission(request, "pos", location)
+    staff = None
+    if managed_loyalty or request.headers.get("X-Pos-Staff"):
+        staff = require_staff_permission(request, "pos", location)
 
     customer = customer_of(data.get("customerId"))
     if managed_loyalty and data.get("customerId") and customer is None:
@@ -340,12 +341,14 @@ def create_order(request, data):
         reward_redeemed=data.get("rewardUsed", False),
         placed_at=placed,
         note=data.get("note") or "",
-        staff_name=data.get("staff") or "",
+        staff_name=(staff.get_full_name().strip() or staff.email)
+        if staff
+        else data.get("staff") or "",
         terminal_id=terminal_of(request),
         history=data.get("history") or [],
         review_note="\n".join(notes),
-        handled_by=user,
-        handled_at=timezone.now(),
+        handled_by=staff,
+        handled_at=timezone.now() if staff else None,
         created_by=user,
         updated_by=user,
         pos_loyalty_managed=data.get("serverLoyalty", False),
@@ -536,7 +539,10 @@ def change_status(request, order, status, text):
     """Stores a new status, notes it, and tells an app customer what happened."""
     previous = order.status
     order.status = status
-    order.handled_by = request.user
+    staff = getattr(request, "pos_staff", None)
+    if staff is None and request.headers.get("X-Pos-Staff"):
+        staff = require_staff_permission(request, "orders", order.location)
+    order.handled_by = staff or order.handled_by
     order.handled_at = timezone.now()
     note_history(order, text)
     touch(order, request, "status", "handled_by", "handled_at", "history")
